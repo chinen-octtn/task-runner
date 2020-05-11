@@ -1,5 +1,6 @@
 node_modules
-app/dev
+/dist/
+package-lock.json
 
 ### https://raw.github.com/github/gitignore//Global/Windows.gitignore
 
