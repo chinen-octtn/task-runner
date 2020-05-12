@@ -1,3 +1,3 @@
 export function hello() {
-  alert("hellow w");
+  console.log('hello watch!');
 }
