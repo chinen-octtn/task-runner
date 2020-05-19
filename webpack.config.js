@@ -1,35 +1,13 @@
 module.exports = {
-  // メインとなるJavaScriptファイル（エントリーポイント）
-  entry: `./src/index.js`,
-  // mode: “development” or “production”,
+  // モード値を production に設定すると最適化された状態で、
+  // development に設定するとソースマップ有効でJSファイルが出力される
+  // mode: "production",
   mode: "development",
-  // ファイルの出力設定
+
+  // メインのJS
+  entry: "./src/main.js",
+  // 出力ファイル
   output: {
-    //  出力ファイルのディレクトリ名
-    // path: `${__dirname}/dist`,
-    // 出力ファイル名
-    filename: "main.js"
-  },
-
-  module: {
-    rules: [
-      {
-        test: /\.css/,
-        use: [
-          "style-loader",
-          {
-            loader: "css-loader",
-            options: { url: false }
-          }
-        ]
-      }
-    ]
-  },
-
-  // ローカル開発用環境を立ち上げる
-  // 実行時にブラウザが自動的に localhost を開く
-  devServer: {
-    contentBase: "dist", // root
-    open: true
+    filename: "bundle.js"
   }
-};
+}
