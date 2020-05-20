@@ -6,7 +6,8 @@ const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
-// const cleanCSS = require('gulp-clean-css');
+const mqpacker = require("css-mqpacker"); // メディアクエリーをまとる
+// const cleanCSS = require('gulp-clean-css'); // Sassを圧縮する
 
 // webpack
 const webpackStream = require("webpack-stream");
@@ -24,7 +25,8 @@ const notify = require('gulp-notify');
 sass.compiler = require('dart-sass');
 function css() {
   const plugins = [
-    autoprefixer({ grid: 'autoplace' })
+    autoprefixer({ grid: 'autoplace' }),
+    mqpacker()
   ];
   return (
     gulp
