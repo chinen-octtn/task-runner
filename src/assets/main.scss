@@ -1,4 +1,4 @@
-$color-main: red;
+@use './var' as *;
 
 h1 {
   color: $color-main;

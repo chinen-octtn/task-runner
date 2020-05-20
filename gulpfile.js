@@ -19,6 +19,9 @@ const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 
 
+// Sass
+// scss -> css
+sass.compiler = require('dart-sass');
 function css() {
   const plugins = [
     autoprefixer({ grid: 'autoplace' })
