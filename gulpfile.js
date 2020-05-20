@@ -3,7 +3,7 @@ const gulp = require("gulp");
 
 // CSS
 const sass = require('gulp-sass');
-const sassGlob = require('gulp-sass-glob');
+const sassGlob = require('gulp-sass-glob'); // sassのインポートを*でまとめる
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const mqpacker = require("css-mqpacker"); // メディアクエリーをまとる
@@ -12,8 +12,7 @@ const mqpacker = require("css-mqpacker"); // メディアクエリーをまと�
 // webpack
 const webpackStream = require("webpack-stream");
 const webpack = require("webpack");
-// webpackの設定ファイルの読み込み
-const webpackConfig = require("./webpack.config");
+const webpackConfig = require("./webpack.config");　// webpackの設定ファイルの読み込み
 
 // utility
 const plumber = require('gulp-plumber');
