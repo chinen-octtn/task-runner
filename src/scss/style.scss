@@ -1,0 +1,5 @@
+@use './foundation/_define' as define;
+
+h1 {
+  color: define.$color-main;
+}

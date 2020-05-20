@@ -30,7 +30,7 @@ function css() {
   ];
   return (
     gulp
-      .src('src/assets/main.scss')
+      .src('src/scss/style.scss')
       // globパターンでのインポート機能を追加
       .pipe(sassGlob())
       .pipe(
@@ -53,7 +53,7 @@ function css() {
       //   }),
       // )
       .pipe(
-        gulp.dest('dist/assets/'),
+        gulp.dest('dist/assets/css/'),
       )
       // .pipe(browserSync.reload({ stream: true }))
   );
