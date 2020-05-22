@@ -7,7 +7,6 @@ const sassGlob = require('gulp-sass-glob'); // sassのインポートを*でま�
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const mqpacker = require("css-mqpacker"); // メディアクエリーをまとる
-// const cleanCSS = require('gulp-clean-css'); // Sassを圧縮する
 
 // webpack
 const webpackStream = require("webpack-stream");
@@ -34,23 +33,11 @@ function css() {
       .pipe(sassGlob())
       .pipe(
         sass({
-          outputStyle: 'expanded',
+          outputStyle: 'expanded', // expanded or compressed
         }).on('error', sass.logError),
       )
       .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
       .pipe(postcss(plugins))
-      // .pipe(
-      //   cleanCSS({
-      //     // ↓圧縮するかしないか
-      //     // format: 'beautify',
-      //     compatibility: {
-      //       properties: {
-      //         // 0の単位を不必要な場合は削除する
-      //         zeroUnits: false,
-      //       },
-      //     },
-      //   }),
-      // )
       .pipe(
         gulp.dest('dist/assets/css/'),
       )
