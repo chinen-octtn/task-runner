@@ -7,6 +7,8 @@ const sassGlob = require('gulp-sass-glob'); // sassのインポートを*でま�
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const mqpacker = require("css-mqpacker"); // メディアクエリーをまとる
+const stylelint = require('stylelint');
+const postcssReporter = require('postcss-reporter');
 
 // webpack
 const webpackStream = require("webpack-stream");
@@ -22,22 +24,27 @@ const notify = require('gulp-notify');
 // scss -> css
 sass.compiler = require('dart-sass');
 function css() {
-  const plugins = [
+  const lintPlugins = [
+    stylelint(),
+    postcssReporter({ clearMessages: true }),
+  ];
+  const formatPlugins = [
     autoprefixer({ grid: 'autoplace' }),
-    mqpacker()
+    mqpacker(),
   ];
   return (
     gulp
       .src('src/scss/style.scss')
       // globパターンでのインポート機能を追加
       .pipe(sassGlob())
+      .pipe(postcss(lintPlugins))
       .pipe(
         sass({
           outputStyle: 'expanded', // expanded or compressed
         }).on('error', sass.logError),
       )
       .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-      .pipe(postcss(plugins))
+      .pipe(postcss(formatPlugins))
       .pipe(
         gulp.dest('dist/assets/css/'),
       )
