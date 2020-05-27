@@ -5,7 +5,7 @@ module.exports = {
   mode: "development",
 
   // メインのJS
-  entry: "./src/main.js",
+  entry: "./src/js/main.js",
   // 出力ファイル
   output: {
     filename: "bundle.js"
