@@ -19,6 +19,31 @@ const webpackConfig = require("./webpack.config");　// webpackの設定ファ�
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 
+/**
+ * 開発用ディレクトリ
+ */
+const src = {
+  root: 'src/',
+  html: ['src/**/*.pug', '!src/**/_*.pug'],
+  htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
+  data: 'src/_data/',
+  css: './src/css/main.scss',
+  cssWatch: 'src/**/*.scss',
+  js: 'src/**/*.js',
+  image: 'src/img/**/*.{png,jpg,gif,svg,ico}',
+  imageWatch: 'src/assets/img/**/*',
+};
+//　ここで指定したパスが↓dest時に引き継がれる
+
+/**
+ * 公開用ディレクトリ
+ */
+const dest = {
+  root: 'dist/',
+  image: 'dist/assets/img/',
+  css: 'dist/assets/css/',
+};
+
 
 // Sass
 // scss -> css
@@ -54,9 +79,24 @@ function css() {
 
 exports.css = css;
 
+
+function js() {
+  return (
+    webpackStream(webpackConfig, webpack)
+  );
+}
+exports.js = js;
+
+function watch() {
+  // gulp.watch(src.htmlWatch, html);
+  // gulp.watch(src.imageWatch, image);
+  gulp.watch(src.cssWatch, css);
+  gulp.watch(src.js, js);
+}
+exports.watch = watch;
+
+
 // タスクの定義。 ()=> の部分はfunction() でも可
 gulp.task("default", () => {
-  // ☆ webpackStreamの第2引数にwebpackを渡す☆
-  return webpackStream(webpackConfig, webpack)
-    .pipe(gulp.dest("dist"));
+  return
 });
