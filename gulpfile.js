@@ -83,6 +83,7 @@ exports.css = css;
 function js() {
   return (
     webpackStream(webpackConfig, webpack)
+    .pipe(gulp.dest(dest.js))
   );
 }
 exports.js = js;
