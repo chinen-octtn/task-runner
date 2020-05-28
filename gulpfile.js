@@ -27,9 +27,8 @@ const src = {
   html: ['src/**/*.pug', '!src/**/_*.pug'],
   htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
   data: 'src/_data/',
-  css: './src/css/main.scss',
+  css: './src/scss/main.scss',
   cssWatch: 'src/**/*.scss',
-  js: 'src/**/*.js',
   image: 'src/img/**/*.{png,jpg,gif,svg,ico}',
   imageWatch: 'src/assets/img/**/*',
 };
@@ -40,8 +39,9 @@ const src = {
  */
 const dest = {
   root: 'dist/',
-  image: 'dist/assets/img/',
+  // image: 'dist/assets/img/',
   css: 'dist/assets/css/',
+  js: 'dist/assets/js/',
 };
 
 
@@ -59,7 +59,7 @@ function css() {
   ];
   return (
     gulp
-      .src('src/scss/style.scss')
+      .src(src.css)
       // globパターンでのインポート機能を追加
       .pipe(sassGlob())
       .pipe(postcss(lintPlugins))
@@ -71,12 +71,11 @@ function css() {
       .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
       .pipe(postcss(formatPlugins))
       .pipe(
-        gulp.dest('dist/assets/css/'),
+        gulp.dest(dest.css),
       )
       // .pipe(browserSync.reload({ stream: true }))
   );
 }
-
 exports.css = css;
 
 

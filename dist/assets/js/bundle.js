@@ -81,32 +81,32 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/main.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/js/main.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/main.js":
-/*!*********************!*\
-  !*** ./src/main.js ***!
-  \*********************/
+/***/ "./src/js/main.js":
+/*!************************!*\
+  !*** ./src/js/main.js ***!
+  \************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _sub_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sub.js */ \"./src/sub.js\");\n\n\nObject(_sub_js__WEBPACK_IMPORTED_MODULE_0__[\"hello\"])();\n\n\n//# sourceURL=webpack:///./src/main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _sub_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sub.js */ \"./src/js/sub.js\");\n\n\nObject(_sub_js__WEBPACK_IMPORTED_MODULE_0__[\"hello\"])();\n\nconst hello2 = () => {\n  console.log('pika');\n}\n\nhello2();\n\n\n//# sourceURL=webpack:///./src/js/main.js?");
 
 /***/ }),
 
-/***/ "./src/sub.js":
-/*!********************!*\
-  !*** ./src/sub.js ***!
-  \********************/
+/***/ "./src/js/sub.js":
+/*!***********************!*\
+  !*** ./src/js/sub.js ***!
+  \***********************/
 /*! exports provided: hello */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"hello\", function() { return hello; });\nfunction hello() {\n  console.log('hello watch!');\n}\n\n\n//# sourceURL=webpack:///./src/sub.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"hello\", function() { return hello; });\nfunction hello() {\n  console.log('hello watch!');\n}\n\n\n//# sourceURL=webpack:///./src/js/sub.js?");
 
 /***/ })
 
