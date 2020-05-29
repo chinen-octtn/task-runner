@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.10.1",
+    "@babel/preset-env": "^7.10.1",
     "autoprefixer": "^9.8.0",
+    "babel-loader": "^8.1.0",
     "css-mqpacker": "^7.0.0",
     "dart-sass": "^1.25.0",
     "gulp": "^4.0.2",
@@ -23,6 +26,7 @@
     "stylelint": "^13.5.0",
     "stylelint-config-standard": "^20.0.0",
     "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
     "webpack-stream": "^5.2.1"
   }
 }
