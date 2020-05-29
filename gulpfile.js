@@ -24,13 +24,14 @@ const notify = require('gulp-notify');
  */
 const src = {
   root: 'src/',
-  html: ['src/**/*.pug', '!src/**/_*.pug'],
-  htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
-  data: 'src/_data/',
+  // html: ['src/**/*.pug', '!src/**/_*.pug'],
+  // htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
+  // data: 'src/_data/',
   css: './src/scss/main.scss',
   cssWatch: 'src/**/*.scss',
-  image: 'src/img/**/*.{png,jpg,gif,svg,ico}',
-  imageWatch: 'src/assets/img/**/*',
+  jsWatch: 'src/**/*.js',
+  // image: 'src/img/**/*.{png,jpg,gif,svg,ico}',
+  // imageWatch: 'src/assets/img/**/*',
 };
 //　ここで指定したパスが↓dest時に引き継がれる
 
@@ -87,11 +88,12 @@ function js() {
 }
 exports.js = js;
 
+// 監視
 function watch() {
   // gulp.watch(src.htmlWatch, html);
   // gulp.watch(src.imageWatch, image);
   gulp.watch(src.cssWatch, css);
-  gulp.watch(src.js, js);
+  gulp.watch(src.jsWatch, js);
 }
 exports.watch = watch;
 
