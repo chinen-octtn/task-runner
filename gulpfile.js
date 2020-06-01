@@ -10,6 +10,10 @@ const mqpacker = require("css-mqpacker"); // メディアクエリーをまと�
 const stylelint = require('stylelint');
 const postcssReporter = require('postcss-reporter');
 
+// local server
+const browserSync = require('browser-sync');
+const browserSyncSsi = require('browsersync-ssi');
+
 // webpack
 const webpackStream = require("webpack-stream");
 const webpack = require("webpack");
@@ -87,6 +91,42 @@ function js() {
   );
 }
 exports.js = js;
+
+/**
+* ローカルサーバーを起動
+*/
+function serve(done) {
+  // const httpsOption =
+  //   process.env.HTTPS_KEY !== undefined
+  //     ? { key: process.env.HTTPS_KEY, cert: process.env.HTTPS_CERT }
+  //     : false;
+  browserSync({
+    server: {
+      // SSIを使用
+      middleware: [
+        browserSyncSsi({
+          baseDir: dest.root,
+          ext: '.html',
+        }),
+      ],
+      baseDir: dest.root,
+    },
+    // ローカルでhttpsを有効にする場合はコメントアウトを解除、認証用の.envファイルを用意する
+    // https: httpsOption,
+    // 共有画面でスクロールやクリックをミラーリングする場合はtrueにする
+    ghostMode: false,
+    // ローカルIPアドレスでサーバーを立ち上げ
+    open: 'external',
+    // サーバー起動時に表示するページを指定
+    startPath: '/',
+    // サーバー起動時にポップアップを表示させない場合はfalse
+    notify: false,
+  });
+  done();
+}
+exports.serve = serve;
+
+
 
 // 監視
 function watch() {
