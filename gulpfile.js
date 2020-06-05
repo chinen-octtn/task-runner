@@ -1,12 +1,12 @@
 // 必要プラグインの読み込み (var gulp = ~ でも可)
-const gulp = require("gulp");
+const gulp = require('gulp');
 
 // CSS
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob'); // sassのインポートを*でまとめる
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
-const mqpacker = require("css-mqpacker"); // メディアクエリーをまとる
+const mqpacker = require('css-mqpacker'); // メディアクエリーをまとる
 const stylelint = require('stylelint');
 const postcssReporter = require('postcss-reporter');
 
@@ -15,9 +15,9 @@ const browserSync = require('browser-sync');
 const browserSyncSsi = require('browsersync-ssi');
 
 // webpack
-const webpackStream = require("webpack-stream");
-const webpack = require("webpack");
-const webpackConfig = require("./webpack.config");　// webpackの設定ファイルの読み込み
+const webpackStream = require('webpack-stream');
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config');　// webpackの設定ファイルの読み込み
 
 // utility
 const plumber = require('gulp-plumber');
