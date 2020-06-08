@@ -1,6 +1,12 @@
 // 必要プラグインの読み込み (var gulp = ~ でも可)
 const gulp = require('gulp');
 
+// Pug
+const pug = require('gulp-pug');
+const fs = require('fs');
+const data = require('gulp-data');
+const path = require('path');
+
 // CSS
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob'); // sassのインポートを*でまとめる
@@ -34,9 +40,9 @@ const changed = require('gulp-changed');
  */
 const src = {
   root: 'src/',
-  // html: ['src/**/*.pug', '!src/**/_*.pug'],
-  // htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
-  // data: 'src/_data/',
+  html: ['src/pug/**/*.pug', '!src/pug/**/_*.pug'],
+  htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
+  data: 'src/_data/',
   css: './src/scss/main.scss',
   cssWatch: 'src/**/*.scss',
   jsWatch: 'src/**/*.js',
@@ -54,6 +60,50 @@ const dest = {
   css: 'dist/assets/css/',
   js: 'dist/assets/js/',
 };
+
+
+function html() {
+  // JSONファイルの読み込み。
+  const locals = {
+    site: JSON.parse(fs.readFileSync(`${src.data}/site.json`)),
+  };
+  // locals.ja = {
+  //   // 日本語サイト
+  //   site: JSON.parse(fs.readFileSync(`${src.data}ja/site.json`)),
+  // };
+  // locals.en = {
+  //   // 英語サイト
+  //   site: JSON.parse(fs.readFileSync(`${src.data}en/site.json`)),
+  // };
+  return (
+    gulp
+      .src(src.html)
+      .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
+      // .pipe(
+      //   data(file => {
+      //     // 各ページのルート相対パスを格納します。
+      //     locals.pageAbsolutePath = `/${path
+      //       .relative(file.base, file.path.replace(/.pug$/, '.html'))
+      //       .replace(/index\.html$/, '')}`;
+      //     return locals;
+      //   }),
+      // )
+      // .pipe(cache('html'))
+      .pipe(
+        pug({
+          // `locals`に渡したデータを各Pugファイルで取得できます。
+          locals,
+          // ルート相対パスでincludeが使えるようにします。
+          basedir: 'src',
+          // Pugファイルの整形。
+          pretty: true,
+        }),
+      )
+      .pipe(gulp.dest(dest.root))
+      .pipe(browserSync.reload({ stream: true }))
+  );
+}
+exports.html = html;
 
 
 // Sass
@@ -199,7 +249,7 @@ exports.serve = serve;
 
 // 監視
 function watch() {
-  // gulp.watch(src.htmlWatch, html);
+  gulp.watch(src.htmlWatch, html);
   gulp.watch(src.imageWatch, image);
   gulp.watch(src.cssWatch, css);
   gulp.watch(src.jsWatch, js);
