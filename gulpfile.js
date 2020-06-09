@@ -259,7 +259,6 @@ exports.watch = watch;
 
 // タスクの定義。 ()=> の部分はfunction() でも可
 exports.default = gulp.series(
-  // gulp.parallel(html, css, js, image),
-  gulp.parallel(css, js, image),
+  gulp.parallel(html, css, js, image),
   gulp.parallel(serve, watch),
 );
