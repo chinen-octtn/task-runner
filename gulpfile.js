@@ -1,14 +1,14 @@
-// 必要プラグインの読み込み (var gulp = ~ でも可)
+// 必要プラグインの読み込み
 const gulp = require('gulp');
 
 // Pug
-const pug = require('gulp-pug');
+const gulpPug = require('gulp-pug');
 const fs = require('fs');
 const data = require('gulp-data');
 const path = require('path');
 
-// CSS
-const sass = require('gulp-sass');
+// Sass
+const gulpSass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob'); // sassのインポートを*でまとめる
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
@@ -21,7 +21,7 @@ const imagemin = require('gulp-imagemin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 const imageminPngquant = require('imagemin-pngquant');
 
-// local server
+// Local server
 const browserSync = require('browser-sync');
 const browserSyncSsi = require('browsersync-ssi');
 
@@ -30,7 +30,7 @@ const webpackStream = require('webpack-stream');
 const webpack = require('webpack');
 const webpackConfig = require('./webpack.config');　// webpackの設定ファイルの読み込み
 
-// utility
+// Utility
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 const changed = require('gulp-changed');
@@ -62,7 +62,7 @@ const dest = {
 };
 
 
-function html() {
+function pug() {
   // JSONファイルの読み込み。
   const locals = {
     site: JSON.parse(fs.readFileSync(`${src.data}/site.json`)),
@@ -90,7 +90,7 @@ function html() {
       // )
       // .pipe(cache('html'))
       .pipe(
-        pug({
+        gulpPug({
           // `locals`に渡したデータを各Pugファイルで取得できます。
           locals,
           // ルート相対パスでincludeが使えるようにします。
@@ -103,13 +103,13 @@ function html() {
       .pipe(browserSync.reload({ stream: true }))
   );
 }
-exports.html = html;
+exports.pug = pug;
 
 
 // Sass
 // scss -> css
-sass.compiler = require('dart-sass');
-function css() {
+gulpSass.compiler = require('dart-sass');
+function sass() {
   const lintPlugins = [
     stylelint(),
     postcssReporter({ clearMessages: true }),
@@ -125,9 +125,9 @@ function css() {
       .pipe(sassGlob())
       .pipe(postcss(lintPlugins))
       .pipe(
-        sass({
+        gulpSass({
           outputStyle: 'expanded', // expanded or compressed
-        }).on('error', sass.logError),
+        }).on('error', gulpSass.logError),
       )
       .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
       .pipe(postcss(formatPlugins))
@@ -137,7 +137,7 @@ function css() {
       // .pipe(browserSync.reload({ stream: true }))
   );
 }
-exports.css = css;
+exports.sass = sass;
 
 /**
 * JS
@@ -249,16 +249,16 @@ exports.serve = serve;
 
 // 監視
 function watch() {
-  gulp.watch(src.htmlWatch, html);
-  gulp.watch(src.imageWatch, image);
-  gulp.watch(src.cssWatch, css);
+  gulp.watch(src.htmlWatch, pug);
+  gulp.watch(src.cssWatch, sass);
   gulp.watch(src.jsWatch, js);
+  gulp.watch(src.imageWatch, image);
 }
 exports.watch = watch;
 
 
-// タスクの定義。 ()=> の部分はfunction() でも可
+// デフォルトタスク
 exports.default = gulp.series(
-  gulp.parallel(html, css, js, image),
+  gulp.parallel(pug, sass, js, image),
   gulp.parallel(serve, watch),
 );
