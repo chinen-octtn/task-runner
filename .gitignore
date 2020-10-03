@@ -1,6 +1,8 @@
 node_modules
-# /dist/
 package-lock.json
+
+# 出力ファイルを管理する場合はコメントアウトする
+/dist/
 
 ### https://raw.github.com/github/gitignore//Global/Windows.gitignore
 
