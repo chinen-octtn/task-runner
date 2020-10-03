@@ -6,6 +6,9 @@
   "scripts": {
     "start": "gulp"
   },
+  "browserslist": [
+    "defaults"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -33,6 +36,7 @@
     "imagemin-pngquant": "^9.0.0",
     "path": "^0.12.7",
     "postcss-reporter": "^6.0.1",
+    "postcss-scss": "^2.1.1",
     "stylelint": "^13.5.0",
     "stylelint-config-standard": "^20.0.0",
     "webpack": "^4.43.0",

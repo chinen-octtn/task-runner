@@ -11,6 +11,7 @@ const path = require('path');
 const gulpSass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob'); // sassのインポートを*でまとめる
 const postcss = require('gulp-postcss');
+const postcssSyntax = require('postcss-scss');
 const autoprefixer = require('autoprefixer');
 const mqpacker = require('css-mqpacker'); // メディアクエリーをまとる
 const stylelint = require('stylelint');
@@ -43,7 +44,7 @@ const src = {
   html: ['src/pug/**/*.pug', '!src/pug/**/_*.pug'],
   htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
   data: 'src/_data/',
-  css: './src/scss/main.scss',
+  css: ['./src/scss/**/*.scss', '!./src/scss/**/_*.scss'],
   cssWatch: 'src/**/*.scss',
   jsWatch: 'src/**/*.js',
   image: 'src/img/**/*.{png,jpg,gif,svg,ico}',
@@ -115,7 +116,7 @@ function sass() {
     postcssReporter({ clearMessages: true }),
   ];
   const formatPlugins = [
-    autoprefixer({ grid: 'autoplace' }),
+    autoprefixer(),
     mqpacker(),
   ];
   return (
@@ -123,18 +124,22 @@ function sass() {
       .src(src.css)
       // globパターンでのインポート機能を追加
       .pipe(sassGlob())
-      .pipe(postcss(lintPlugins))
+      .pipe(postcss(lintPlugins, {
+        syntax: postcssSyntax
+      }))
       .pipe(
         gulpSass({
           outputStyle: 'expanded', // expanded or compressed
         }).on('error', gulpSass.logError),
       )
       .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-      .pipe(postcss(formatPlugins))
+      .pipe(postcss(formatPlugins, {
+        syntax: postcssSyntax
+      }))
       .pipe(
         gulp.dest(dest.css),
       )
-      // .pipe(browserSync.reload({ stream: true }))
+      .pipe(browserSync.reload({ stream: true }))
   );
 }
 exports.sass = sass;
