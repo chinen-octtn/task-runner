@@ -1,8 +1,5 @@
+// site color
 $color-main: red;
-
-
-
-
 
 // メディアクエリ設定
 $breakpoint-up: ( // min-width
@@ -25,25 +22,5 @@ $breakpoint-down: ( // max-width
 @mixin mq-down($breakpoint: md) { //メインで使用するブレイクポイントを指定
   @media #{map-get($breakpoint-down, $breakpoint)} {
     @content;
-  }
-}
-
-
-.section {
-  max-width: 1250px;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 80px;
-  padding-left: 80px;
-  @include mq-down() {
-    padding-right: 15px;
-    padding-left: 15px;
-  }
-}
-.section_inner {
-  max-width: 1250px;
-  @include mq-down() {
-    padding-right: 15px;
-    padding-left: 15px;
   }
 }

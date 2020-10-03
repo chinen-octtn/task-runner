@@ -41,9 +41,10 @@ const changed = require('gulp-changed');
  */
 const src = {
   root: 'src/',
+  data: 'src/_data/',
+  pug: 'src/pug/',
   html: ['src/pug/**/*.pug', '!src/pug/**/_*.pug'],
   htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
-  data: 'src/_data/',
   css: ['./src/scss/**/*.scss', '!./src/scss/**/_*.scss'],
   cssWatch: 'src/**/*.scss',
   jsWatch: 'src/**/*.js',
@@ -63,6 +64,8 @@ const dest = {
 };
 
 
+// Pug
+// .pug -> .html
 function pug() {
   // JSONファイルの読み込み。
   const locals = {
@@ -95,7 +98,7 @@ function pug() {
           // `locals`に渡したデータを各Pugファイルで取得できます。
           locals,
           // ルート相対パスでincludeが使えるようにします。
-          basedir: 'src',
+          basedir: src.pug,
           // Pugファイルの整形。
           pretty: true,
         }),

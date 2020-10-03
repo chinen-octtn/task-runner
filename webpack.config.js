@@ -31,6 +31,6 @@ module.exports = {
 
   // 出力ファイル
   output: {
-    filename: "bundle.js"
+    filename: "script.js"
   }
 }

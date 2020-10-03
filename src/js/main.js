@@ -1,9 +1,3 @@
-import {hello} from './sub.js';
+import {hello} from './_module/sub.js';
 
 hello();
-
-const hello2 = () => {
-  console.log('poke');
-}
-
-hello2();
