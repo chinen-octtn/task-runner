@@ -4,8 +4,8 @@ const gulp = require('gulp');
 // Pug
 const gulpPug = require('gulp-pug');
 const fs = require('fs');
-const data = require('gulp-data');
-const path = require('path');
+// const data = require('gulp-data'); // Pugで多言語対応したい場合は解除
+// const path = require('path'); // Pugで多言語対応したい場合は解除
 
 // Sass
 const gulpSass = require('gulp-sass');
