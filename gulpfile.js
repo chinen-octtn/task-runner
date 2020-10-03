@@ -152,6 +152,7 @@ function js() {
   return (
     webpackStream(webpackConfig, webpack)
     .pipe(gulp.dest(dest.js))
+    .pipe(browserSync.reload({ stream: true }))
   );
 }
 exports.js = js;
