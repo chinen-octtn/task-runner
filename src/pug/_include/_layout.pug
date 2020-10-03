@@ -1,0 +1,22 @@
+block variables
+
+if directory == '/'
+  - var type= 'website';
+else
+  - var type= 'article';
+
+doctype
+html(lang=site.lang)
+  head(prefix='og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# ' + type + ': http://ogp.me/ns/' + type + '#')
+    include /_include/_meta
+    include /_include/_css
+    block css
+    include /_include/_js
+    block js
+  body
+    include /_include/_header
+
+    block body
+
+    include /_include/_footer
+

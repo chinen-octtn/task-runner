@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-html(lang="ja")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title タスクランナー | #{site.name}
-  body
+extends /_include/_layout
+append variables
+  - var directory ='/'
+block css
+block js
+
+block body
+  main
     h1 タスクランナー
     p テストファイル

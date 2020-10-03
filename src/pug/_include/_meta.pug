@@ -1,0 +1,47 @@
+if site[directory].ogp
+  - var ogp= site[directory].ogp;
+else
+  - var ogp= site.siteImage;
+
+meta(charset='UTF-8')
+meta(http-equiv='X-UA-Compatible' content='IE=edge')
+meta(name='viewport', content=site.viewport)
+meta(name='robots', content='index,follow')
+meta(name='format-detection', content='telephone=no')
+
+if site[directory].keywords
+  meta(name='keywords', content=site[directory].keywords)
+else if site.keywords
+  meta(name='keywords', content=site.keywords)
+
+meta(name='description', content=site[directory].description)
+
+if site.twitterSite
+  meta(name='twitter:site', content=site.twitterSite)
+
+meta(name='twitter:card', content=site.twitterCard)
+meta(name='twitter:image', content=site.url + ogp)
+meta(name='twitter:url', content=site.url + directory)
+meta(name='twitter:description', content=site[directory].description)
+meta(name='twitter:title', content=site[directory].name)
+
+if site.fbAppId
+  meta(property="fb:app_id" content=site.fbAppId)
+else if site.fbAdmins
+  meta(property="fb:admins" content=site.fbAdmins)
+
+meta(property='og:description', content=site[directory].description)
+meta(property='og:site_name', content=site.name)
+meta(property='og:locale', content=site.locale)
+meta(property='og:type', content=type)
+meta(property='og:image', content=site.url + ogp)
+meta(property='og:url', content=site.url + directory)
+meta(property='og:title', content=site[directory].name)
+title #{site[directory].name}
+link(rel='shortcut icon', href='/favicon.ico')
+link(rel='apple-touch-icon', href='/apple-touch-icon.png')
+
+if site[directory].canonical
+  link(rel='canonical', href=site[directory].canonical)
+if site[directory].alternate
+  link(rel='alternate', href=site[directory].alternate, media='only screen and (max-width: 640px)')

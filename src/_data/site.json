@@ -1,11 +1,22 @@
 {
   "url": "https://example.com",
   "name": "サイト名",
+  "viewport": "width=device-width",
   "description": "サイトの概要",
-  "keywords": "サイトのキーワード1, サイトのキーワード2",
-  "ogpImage": "/ogp.jpg",
+  "keywords": "",
+  "lang": "ja",
+  "locale": "ja_JP",
+  "siteImage": "/ogp.png",
   "fbAppId": "",
   "fbAdmins": "",
   "twitterCard": "summary_large_image",
-  "twitterSite": "@SiteAccount"
+  "twitterSite": "",
+  "/": {
+    "name": "トップページ",
+    "description": "トップページの概要",
+    "keywords": "",
+    "ogp": "",
+    "canonical": "",
+    "alternate": ""
+  }
 }
