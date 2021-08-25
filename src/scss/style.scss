@@ -1,4 +1,5 @@
 @use './foundation/_define' as *;
+@use './foundation/_reset' as *;
 
 h1 {
   color: $color-main;
