@@ -1,5 +1,11 @@
-// site color
+// Site color
 $color-main: red;
+// $color-sub: #ccc;
+
+// Base font-size
+$size: 62.5%;
+// Base font-family
+$font: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
 
 // メディアクエリ設定
 $breakpoint-up: ( // min-width
