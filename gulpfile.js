@@ -45,7 +45,7 @@ const src = {
   pug: 'src/pug/',
   html: ['src/pug/**/*.pug', '!src/pug/**/_*.pug'],
   htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
-  css: ['./src/scss/**/*.scss', '!./src/scss/**/_*.scss'],
+  css: ['src/scss/**/**/*.scss', '!/src/scss/**/_*.scss'],
   cssWatch: 'src/**/*.scss',
   jsWatch: 'src/**/*.js',
   image: 'src/img/**/*.{png,jpg,gif,svg,ico}',
@@ -59,7 +59,6 @@ const src = {
 const dest = {
   root: 'dist/',
   image: 'dist/assets/img/',
-  css: 'dist/assets/css/',
   js: 'dist/assets/js/',
 };
 
@@ -128,11 +127,12 @@ function sass() {
       .pipe(
         gulpSass({
           outputStyle: 'expanded', // expanded or compressed
+          includePaths: ['src/scss'],
         }).on('error', gulpSass.logError),
       )
       .pipe(postcss([ cmq(), autoprefixer() ]))
       .pipe(
-        gulp.dest(dest.css),
+        gulp.dest(dest.root),
       )
       .pipe(browserSync.reload({ stream: true }))
   );
