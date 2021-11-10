@@ -1,0 +1,9 @@
+@use '../foundation/mixin' as *;
+
+h1 {
+  color: var(--color-main);
+
+  @include mq() {
+    color: var(--color-sub);
+  }
+}

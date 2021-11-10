@@ -1,5 +1,3 @@
-@use './foundation/_define' as *;
-
 /*
 html5doctor.com Reset Stylesheet
 v1.6.1
@@ -104,6 +102,6 @@ input, select {
 }
 
 html {
-  font-size: $font;
-  font-family: $font;
+  font-size: var(--font-size);
+  font-family: var(--font);
 }
