@@ -13,7 +13,6 @@ const postcssSyntax = require('postcss-scss');
 const autoprefixer = require('autoprefixer');
 const cmq = require('postcss-combine-media-query');
 const stylelint = require('stylelint');
-const postcssReporter = require('postcss-reporter');
 
 // Image
 const imagemin = require('gulp-imagemin');
@@ -94,7 +93,6 @@ exports.pug = pug;
 function sass() {
   const lintPlugins = [
     stylelint(),
-    postcssReporter({ clearMessages: true }),
   ];
   return (
     gulp
