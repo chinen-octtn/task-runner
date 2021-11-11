@@ -1,6 +1,19 @@
-# フロントエンドのローカル開発環境タスクランナー
-
+# マークアップのローカル開発環境タスクランナーgulp
 ※2021/11/10 Node v16に対応するため調整中
+
+Webサイト、LP制作等のローカル開発環境のテンプレート。
+
+JSフレームワークを使わないようなシンプルなHTML/CSS/JSの構築に利用できます。
+
+### gulpタスク
+* pug → HTML
+* Sass（scss）→ CSS
+* TypeScript → Javascript
+* Local Server
+  * Hot Reload
+  * Server Side Include（SSI）
+* Image Optimize
+
 
 ## 動作確認環境
 * node v16.13.0

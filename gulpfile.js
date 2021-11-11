@@ -4,8 +4,6 @@ const gulp = require('gulp');
 // Pug
 const gulpPug = require('gulp-pug');
 const fs = require('fs');
-// const data = require('gulp-data'); // Pugで多言語対応したい場合は解除
-// const path = require('path'); // Pugで多言語対応したい場合は解除
 
 // Sass
 const gulpSass = require('gulp-sass')(require('sass'));
@@ -70,28 +68,10 @@ function pug() {
   const locals = {
     site: JSON.parse(fs.readFileSync(`${src.data}/site.json`)),
   };
-  // locals.ja = {
-  //   // 日本語サイト
-  //   site: JSON.parse(fs.readFileSync(`${src.data}ja/site.json`)),
-  // };
-  // locals.en = {
-  //   // 英語サイト
-  //   site: JSON.parse(fs.readFileSync(`${src.data}en/site.json`)),
-  // };
   return (
     gulp
       .src(src.html)
       .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-      // .pipe(
-      //   data(file => {
-      //     // 各ページのルート相対パスを格納します。
-      //     locals.pageAbsolutePath = `/${path
-      //       .relative(file.base, file.path.replace(/.pug$/, '.html'))
-      //       .replace(/index\.html$/, '')}`;
-      //     return locals;
-      //   }),
-      // )
-      // .pipe(cache('html'))
       .pipe(
         gulpPug({
           // `locals`に渡したデータを各Pugファイルで取得できます。
@@ -260,6 +240,7 @@ exports.watch = watch;
 
 // デフォルトタスク
 exports.default = gulp.series(
-  gulp.parallel(pug, sass, js, image),
+  gulp.parallel(pug, sass, image),
+  // gulp.parallel(pug, sass, js, image),
   gulp.parallel(serve, watch),
 );
