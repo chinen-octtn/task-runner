@@ -1,37 +1,37 @@
 // 必要プラグインの読み込み
-const gulp = require('gulp');
+const gulp = require('gulp')
 
 // Pug
-const gulpPug = require('gulp-pug');
-const fs = require('fs');
+const gulpPug = require('gulp-pug')
+const fs = require('fs')
 
 // Sass
-const gulpSass = require('gulp-sass')(require('sass'));
-const sassGlob = require("gulp-sass-glob-use-forward");
-const postcss = require('gulp-postcss');
-const postcssSyntax = require('postcss-scss');
-const autoprefixer = require('autoprefixer');
-const cmq = require('postcss-combine-media-query');
-const stylelint = require('stylelint');
+const gulpSass = require('gulp-sass')(require('sass'))
+const sassGlob = require('gulp-sass-glob-use-forward')
+const postcss = require('gulp-postcss')
+const postcssSyntax = require('postcss-scss')
+const autoprefixer = require('autoprefixer')
+const cmq = require('postcss-combine-media-query')
+const stylelint = require('stylelint')
 
 // Image
-const imagemin = require('gulp-imagemin');
-const imageminMozjpeg = require('imagemin-mozjpeg');
-const imageminPngquant = require('imagemin-pngquant');
+const imagemin = require('gulp-imagemin')
+const imageminMozjpeg = require('imagemin-mozjpeg')
+const imageminPngquant = require('imagemin-pngquant')
 
 // Local server
-const browserSync = require('browser-sync');
-const browserSyncSsi = require('browsersync-ssi');
+const browserSync = require('browser-sync')
+const browserSyncSsi = require('browsersync-ssi')
 
 // webpack
-const webpackStream = require('webpack-stream');
-const webpack = require('webpack');
-const webpackConfig = require('./webpack.config');　// webpackの設定ファイルの読み込み
-
+const webpackStream = require('webpack-stream')
+const webpack = require('webpack')
+const webpackConfig = require('./webpack.config') // webpackの設定ファイルの読み込み
+const named = require('vinyl-named')
 // Utility
-const plumber = require('gulp-plumber');
-const notify = require('gulp-notify');
-const changed = require('gulp-changed');
+const plumber = require('gulp-plumber')
+const notify = require('gulp-notify')
+const changed = require('gulp-changed')
 
 /**
  * 開発用ディレクトリ
@@ -40,15 +40,15 @@ const src = {
   root: 'src/',
   data: 'src/_data/',
   pug: 'src/pug/',
-  html: ['src/pug/**/*.pug', '!src/pug/**/_*.pug'],
+  html: 'src/pug/**/!(_)*.pug',
   htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
-  css: ['src/scss/**/**/*.scss', '!/src/scss/**/_*.scss'],
-  cssWatch: 'src/**/*.scss',
+  css: 'src/**/*.scss',
+  sass: 'src/scss/**/!(_)*.scss',
+  js: 'src/js/**/!(_)*.js',
   jsWatch: 'src/**/*.js',
   image: 'src/img/**/*.{png,jpg,gif,svg,ico}',
   imageWatch: 'src/img/**/*',
-};
-//　ここで指定したパスが↓dest時に引き継がれる
+}
 
 /**
  * 公開用ディレクトリ
@@ -56,9 +56,7 @@ const src = {
 const dest = {
   root: 'dist/',
   image: 'dist/assets/img/',
-  js: 'dist/assets/js/',
-};
-
+}
 
 // Pug
 // .pug -> .html
@@ -66,70 +64,71 @@ function pug() {
   // JSONファイルの読み込み。
   const locals = {
     site: JSON.parse(fs.readFileSync(`${src.data}/site.json`)),
-  };
-  return (
-    gulp
-      .src(src.html)
-      .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-      .pipe(
-        gulpPug({
-          // `locals`に渡したデータを各Pugファイルで取得できます。
-          locals,
-          // ルート相対パスでincludeが使えるようにします。
-          basedir: src.pug,
-          // Pugファイルの整形。
-          pretty: true,
-        }),
-      )
-      .pipe(gulp.dest(dest.root))
-      .pipe(browserSync.reload({ stream: true }))
-  );
+  }
+  return gulp
+    .src(src.html)
+    .pipe(
+      plumber({ errorHandler: notify.onError('Error: <%= error.message %>') })
+    )
+    .pipe(
+      gulpPug({
+        // `locals`に渡したデータを各Pugファイルで取得できます。
+        locals,
+        // ルート相対パスでincludeが使えるようにします。
+        basedir: src.pug,
+        // Pugファイルの整形。
+        pretty: true,
+      })
+    )
+    .pipe(gulp.dest(dest.root))
+    .pipe(browserSync.reload({ stream: true }))
 }
-exports.pug = pug;
-
+exports.pug = pug
 
 // Sass
 // scss -> css
 function sass() {
-  const lintPlugins = [
-    stylelint(),
-  ];
-  return (
-    gulp
-      .src(src.css)
-      .pipe(plumber({ errorHandler: notify.onError('Error: <%= error.message %>') }))
-      .pipe(postcss(lintPlugins, {
-        syntax: postcssSyntax
-      }))
-      .pipe(sassGlob())
-      .pipe(
-        gulpSass({
-          outputStyle: 'expanded', // expanded or compressed
-          includePaths: ['src/scss'],
-        }).on('error', gulpSass.logError),
-      )
-      .pipe(postcss([ cmq(), autoprefixer() ]))
-      .pipe(
-        gulp.dest(dest.root),
-      )
-      .pipe(browserSync.reload({ stream: true }))
-  );
+  const lintPlugins = [stylelint()]
+  return gulp
+    .src(src.sass)
+    .pipe(
+      plumber({ errorHandler: notify.onError('Error: <%= error.message %>') })
+    )
+    .pipe(
+      postcss(lintPlugins, {
+        syntax: postcssSyntax,
+      })
+    )
+    .pipe(sassGlob())
+    .pipe(
+      gulpSass({
+        outputStyle: 'expanded', // expanded or compressed
+        includePaths: ['src/scss'],
+      }).on('error', gulpSass.logError)
+    )
+    .pipe(postcss([cmq(), autoprefixer()]))
+    .pipe(gulp.dest(dest.root))
+    .pipe(browserSync.reload({ stream: true }))
 }
-exports.sass = sass;
+exports.sass = sass
 
 /**
-* JS
-* ES6をWebpackでbundle + ES5に変換
-*/
+ * JS
+ * ES6をWebpackでbundle
+ */
 function js() {
-  return (
-    webpackStream(webpackConfig, webpack)
-    .pipe(gulp.dest(dest.js))
+  return gulp
+    .src(src.js)
+    .pipe(
+      named((file) => {
+        return file.relative.replace(/\.[^\.]+$/, '')
+      })
+    )
+    .pipe(webpackStream(webpackConfig, webpack))
+    .pipe(gulp.dest(dest.root))
     .pipe(browserSync.reload({ stream: true }))
-  );
 }
-exports.js = js;
-
+exports.js = js
 
 /**
  * 画像を圧縮
@@ -142,10 +141,10 @@ function image() {
       plumber({
         errorHandler(err) {
           // eslint-disable-next-line no-console
-          console.log(err.messageFormatted);
-          this.emit('end');
+          console.log(err.messageFormatted)
+          this.emit('end')
         },
-      }),
+      })
     )
     .pipe(
       imagemin([
@@ -182,17 +181,16 @@ function image() {
         }),
         imagemin.optipng(),
         imagemin.gifsicle(),
-      ]),
+      ])
     )
     .pipe(gulp.dest(dest.image))
-    .pipe(browserSync.reload({ stream: true }));
+    .pipe(browserSync.reload({ stream: true }))
 }
-exports.image = image;
-
+exports.image = image
 
 /**
-* ローカルサーバーを起動
-*/
+ * ローカルサーバーを起動
+ */
 function serve(done) {
   // const httpsOption =
   //   process.env.HTTPS_KEY !== undefined
@@ -219,26 +217,23 @@ function serve(done) {
     startPath: '/',
     // サーバー起動時にポップアップを表示させない場合はfalse
     notify: false,
-  });
-  done();
+  })
+  done()
 }
-exports.serve = serve;
-
-
+exports.serve = serve
 
 // 監視
 function watch() {
-  gulp.watch(src.htmlWatch, pug);
-  gulp.watch(src.cssWatch, sass);
-  gulp.watch(src.jsWatch, js);
-  gulp.watch(src.imageWatch, image);
+  gulp.watch(src.htmlWatch, pug)
+  gulp.watch(src.css, sass)
+  gulp.watch(src.jsWatch, js)
+  gulp.watch(src.imageWatch, image)
 }
-exports.watch = watch;
-
+exports.watch = watch
 
 // デフォルトタスク
 exports.default = gulp.series(
   gulp.parallel(pug, sass, image),
   // gulp.parallel(pug, sass, js, image),
-  gulp.parallel(serve, watch),
-);
+  gulp.parallel(serve, watch)
+)
