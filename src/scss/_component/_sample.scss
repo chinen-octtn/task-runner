@@ -1,0 +1,10 @@
+@use '../_foundation/mixin' as *;
+
+h1 {
+  color: var(--color-main);
+  font-size: 3rem;
+
+  @include mq() {
+    font-size: 5rem;
+  }
+}
