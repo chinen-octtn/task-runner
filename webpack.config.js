@@ -3,8 +3,17 @@ module.exports = {
   // development に設定するとソースマップ有効でJSファイルが出力される
   // mode: "production",
   mode: 'development',
-
-  // 出力ファイル
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
   output: {
     filename: '[name].js',
   },

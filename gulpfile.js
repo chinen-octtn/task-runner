@@ -44,8 +44,8 @@ const src = {
   htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
   css: 'src/**/*.scss',
   sass: 'src/scss/**/!(_)*.scss',
-  js: 'src/js/**/!(_)*.js',
-  jsWatch: 'src/**/*.js',
+  js: 'src/js/**/!(_)*.ts',
+  jsWatch: 'src/**/*.ts',
   image: 'src/img/**/*.{png,jpg,gif,svg,ico}',
   imageWatch: 'src/img/**/*',
 }

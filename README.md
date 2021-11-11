@@ -10,7 +10,9 @@ JS フレームワークを使わないようなシンプルな HTML/CSS/JS の�
 
 - pug → HTML
 - Sass（scss）→ CSS
+  - Stylelint
 - TypeScript → Javascript
+  - ESLint
 - Local Server
   - Hot Reload
   - Server Side Include（SSI）
