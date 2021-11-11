@@ -37,50 +37,55 @@ const changed = require('gulp-changed')
  * 開発用ディレクトリ
  */
 const src = {
-  root: 'src/',
-  data: 'src/_data/',
-  pug: 'src/pug/',
-  html: 'src/pug/**/!(_)*.pug',
-  htmlWatch: ['src/**/*.pug', 'src/_data/**/*.json'],
-  css: 'src/**/*.scss',
-  sass: 'src/scss/**/!(_)*.scss',
-  js: 'src/js/**/!(_)*.ts',
-  jsWatch: 'src/**/*.ts',
-  image: 'src/img/**/*.{png,jpg,gif,svg,ico}',
-  imageWatch: 'src/img/**/*',
+  data: 'src/_data/site.json',
+  pug: {
+    dir: 'src/pug/',
+    file: 'src/pug/**/!(_)*.pug',
+    watch: ['src/pug/**/*.pug', 'src/_data/**/*.json'],
+  },
+  sass: {
+    dir: 'src/scss',
+    file: 'src/scss/**/!(_)*.scss',
+    watch: 'src/**/*.scss',
+  },
+  js: {
+    file: 'src/js/**/!(_)*.ts',
+    watch: 'src/**/*.ts',
+  },
+  img: {
+    file: 'src/img/**/*.{png,jpg,gif,svg,ico}',
+    watch: 'src/img/**/*',
+  },
 }
 
 /**
  * 公開用ディレクトリ
  */
-const dest = {
-  root: 'dist/',
-  image: 'dist/assets/img/',
-}
+const dest = 'dist/'
 
 // Pug
 // .pug -> .html
 function pug() {
   // JSONファイルの読み込み。
   const locals = {
-    site: JSON.parse(fs.readFileSync(`${src.data}/site.json`)),
+    site: JSON.parse(fs.readFileSync(src.data)),
   }
   return gulp
-    .src(src.html)
+    .src(src.pug.file)
     .pipe(
       plumber({ errorHandler: notify.onError('Error: <%= error.message %>') })
     )
     .pipe(
       gulpPug({
-        // `locals`に渡したデータを各Pugファイルで取得できます。
+        // `locals`に渡したデータを各Pugファイルで取得
         locals,
-        // ルート相対パスでincludeが使えるようにします。
-        basedir: src.pug,
+        // ルート相対パスでincludeが使えるようにする
+        basedir: src.pug.dir,
         // Pugファイルの整形。
         pretty: true,
       })
     )
-    .pipe(gulp.dest(dest.root))
+    .pipe(gulp.dest(dest))
     .pipe(browserSync.reload({ stream: true }))
 }
 exports.pug = pug
@@ -90,7 +95,7 @@ exports.pug = pug
 function sass() {
   const lintPlugins = [stylelint()]
   return gulp
-    .src(src.sass)
+    .src(src.sass.file)
     .pipe(
       plumber({ errorHandler: notify.onError('Error: <%= error.message %>') })
     )
@@ -103,11 +108,11 @@ function sass() {
     .pipe(
       gulpSass({
         outputStyle: 'expanded', // expanded or compressed
-        includePaths: ['src/scss'],
+        includePaths: [src.sass.dir],
       }).on('error', gulpSass.logError)
     )
     .pipe(postcss([cmq(), autoprefixer()]))
-    .pipe(gulp.dest(dest.root))
+    .pipe(gulp.dest(dest))
     .pipe(browserSync.reload({ stream: true }))
 }
 exports.sass = sass
@@ -118,14 +123,14 @@ exports.sass = sass
  */
 function js() {
   return gulp
-    .src(src.js)
+    .src(src.js.file)
     .pipe(
       named((file) => {
         return file.relative.replace(/\.[^\.]+$/, '')
       })
     )
     .pipe(webpackStream(webpackConfig, webpack))
-    .pipe(gulp.dest(dest.root))
+    .pipe(gulp.dest(dest))
     .pipe(browserSync.reload({ stream: true }))
 }
 exports.js = js
@@ -135,8 +140,8 @@ exports.js = js
  */
 function image() {
   return gulp
-    .src(src.image)
-    .pipe(changed(dest.image))
+    .src(src.img.file)
+    .pipe(changed(dest))
     .pipe(
       plumber({
         errorHandler(err) {
@@ -183,7 +188,7 @@ function image() {
         imagemin.gifsicle(),
       ])
     )
-    .pipe(gulp.dest(dest.image))
+    .pipe(gulp.dest(dest))
     .pipe(browserSync.reload({ stream: true }))
 }
 exports.image = image
@@ -201,11 +206,11 @@ function serve(done) {
       // SSIを使用
       middleware: [
         browserSyncSsi({
-          baseDir: dest.root,
+          baseDir: dest,
           ext: '.html',
         }),
       ],
-      baseDir: dest.root,
+      baseDir: dest,
     },
     // ローカルでhttpsを有効にする場合はコメントアウトを解除、認証用の.envファイルを用意する
     // https: httpsOption,
@@ -224,16 +229,15 @@ exports.serve = serve
 
 // 監視
 function watch() {
-  gulp.watch(src.htmlWatch, pug)
-  gulp.watch(src.css, sass)
-  gulp.watch(src.jsWatch, js)
-  gulp.watch(src.imageWatch, image)
+  gulp.watch(src.pug.watch, pug)
+  gulp.watch(src.sass.watch, sass)
+  gulp.watch(src.js.watch, js)
+  gulp.watch(src.img.watch, image)
 }
 exports.watch = watch
 
 // デフォルトタスク
 exports.default = gulp.series(
-  gulp.parallel(pug, sass, image),
-  // gulp.parallel(pug, sass, js, image),
+  gulp.parallel(pug, sass, js, image),
   gulp.parallel(serve, watch)
 )
