@@ -1,22 +1,26 @@
 // media query
-$breakpoint-up: ( // min-width
+$breakpoint-up: (
+  // min-width
   'sm': 'screen and (min-width: 400px)',
   'md': 'screen and (min-width: 740px)',
   'lg': 'screen and (min-width: 1000px)',
-  'xl': 'screen and (min-width: 1200px)',
+  'xl': 'screen and (min-width: 1200px)'
 ) !default;
-$breakpoint-down: ( // max-width
+$breakpoint-down: (
+  // max-width
   'sm': 'screen and (max-width: 399px)',
   'md': 'screen and (max-width: 739px)',
   'lg': 'screen and (max-width: 999px)',
-  'xl': 'screen and (max-width: 1199px)',
+  'xl': 'screen and (max-width: 1199px)'
 ) !default;
-@mixin mq($breakpoint: md) { //メインで使用するブレイクポイントを指定
+@mixin mq($breakpoint: md) {
+  //メインで使用するブレイクポイントを指定
   @media #{map-get($breakpoint-up, $breakpoint)} {
     @content;
   }
 }
-@mixin mq-down($breakpoint: md) { //メインで使用するブレイクポイントを指定
+@mixin mq-down($breakpoint: md) {
+  //メインで使用するブレイクポイントを指定
   @media #{map-get($breakpoint-down, $breakpoint)} {
     @content;
   }
