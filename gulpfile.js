@@ -1,4 +1,5 @@
-// npm packageの読み込み
+/** ===== var ===== **/
+// gulp
 const gulp = require('gulp')
 
 // Pug
@@ -33,15 +34,16 @@ const plumber = require('gulp-plumber')
 const notify = require('gulp-notify')
 const changed = require('gulp-changed')
 
-/**
- * 開発用ディレクトリ
- */
+// 公開用ディレクトリ
+const dest = 'dist/'
+
+// 開発用ディレクトリ
 const src = {
   data: 'src/_data/site.json',
   pug: {
     dir: 'src/pug/',
     file: 'src/pug/**/!(_)*.pug',
-    watch: ['src/pug/**/*.pug', 'src/_data/**/*.json'],
+    watch: ['src/pug/**/(_)*.pug', 'src/_data/**/*.json'],
   },
   sass: {
     dir: 'src/scss',
@@ -58,40 +60,64 @@ const src = {
   },
 }
 
+/** ===== task ===== **/
 /**
- * 公開用ディレクトリ
+ * Reload
  */
-const dest = 'dist/'
+const reload = (done) => {
+  browserSync.reload()
+  done()
+}
+exports.reload = reload
 
-// Pug
-// .pug -> .html
-function pug() {
-  // JSONファイルの読み込み。
-  const locals = {
+/**
+ * Pug
+ * .pug -> .html
+ */
+const pugFunc = (isAll) => {
+  // metaデータ等JSONファイルの読み込み。
+  const lastRun = isAll ? null : gulp.lastRun(pugFunc)
+  const data = {
     site: JSON.parse(fs.readFileSync(src.data)),
   }
-  return gulp
-    .src(src.pug.file)
-    .pipe(
-      plumber({ errorHandler: notify.onError('Error: <%= error.message %>') })
-    )
-    .pipe(
-      gulpPug({
-        // `locals`に渡したデータを各Pugファイルで取得
-        locals,
-        // ルート相対パスでincludeが使えるようにする
-        basedir: src.pug.dir,
-        // Pugファイルの整形。
-        pretty: true,
-      })
-    )
-    .pipe(gulp.dest(dest))
-    .pipe(browserSync.reload({ stream: true }))
+  return (
+    gulp
+      .src(src.pug.file, { since: lastRun })
+      // .src(src.pug.file, { since: gulp.lastRun(pug) })
+      .pipe(
+        plumber({ errorHandler: notify.onError('Error: <%= error.message %>') })
+      )
+      .pipe(
+        gulpPug({
+          // dataを各Pugファイルで取得
+          data,
+          // ルート相対パスでincludeが使えるようにする
+          basedir: src.pug.dir,
+          // Pugファイルの整形
+          pretty: true,
+        })
+      )
+      .pipe(gulp.dest(dest))
+  )
 }
-exports.pug = pug
 
-// Sass
-// scss -> css
+// 差分build
+const pug = () => {
+  return pugFunc()
+}
+const html = gulp.series(pug, reload)
+
+// 全build
+const pugAll = () => {
+  console.log('Build all pug file...')
+  return pugFunc(true)
+}
+const htmlAll = gulp.series(pugAll, reload)
+
+/**
+ * Sass
+ * .scss -> .css
+ */
 function sass() {
   const lintPlugins = [stylelint()]
   return gulp
@@ -120,6 +146,7 @@ exports.sass = sass
 /**
  * JS
  * ES6をWebpackでbundle
+ * .ts → .js
  */
 function js() {
   return gulp
@@ -136,7 +163,7 @@ function js() {
 exports.js = js
 
 /**
- * 画像を圧縮
+ * Image Optimizer
  */
 function image() {
   return gulp
@@ -187,7 +214,7 @@ function image() {
 exports.image = image
 
 /**
- * ローカルサーバーを起動
+ * Local server
  */
 function serve(done) {
   // const httpsOption =
@@ -207,30 +234,32 @@ function serve(done) {
     },
     // ローカルでhttpsを有効にする場合はコメントアウトを解除、認証用の.envファイルを用意する
     // https: httpsOption,
-    // 共有画面でスクロールやクリックをミラーリングする場合はtrueにする
+    // 他の画面でクリックをミラーリングしない
     ghostMode: false,
-    // ローカルIPアドレスでサーバーを立ち上げ
+    // ローカルIPアドレスで起動する
     open: 'external',
-    // サーバー起動時に表示するページを指定
+    // サーバー起動時に表示するページ
     startPath: '/',
-    // サーバー起動時にポップアップを表示させない場合はfalse
+    // サーバー起動時の通知は不要
     notify: false,
   })
   done()
 }
 exports.serve = serve
 
-// 監視
+/**
+ * Watch
+ */
 function watch() {
-  gulp.watch(src.pug.watch, pug)
+  gulp.watch(src.pug.file, html)
+  gulp.watch(src.pug.watch, htmlAll)
   gulp.watch(src.sass.watch, sass)
   gulp.watch(src.js.watch, js)
   gulp.watch(src.img.watch, image)
 }
 exports.watch = watch
 
-// デフォルトタスク
-exports.default = gulp.series(
-  gulp.parallel(pug, sass, js, image),
-  gulp.parallel(serve, watch)
-)
+/**
+ * default
+ */
+exports.default = gulp.series(pug, sass, serve, gulp.parallel(js, image), watch)
