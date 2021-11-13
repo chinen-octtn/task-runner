@@ -1,7 +1,7 @@
 {
   "name": "gulp-sample",
   "version": "1.2.0",
-  "description": "",
+  "description": "Web サイト、LP 制作等のローカル開発環境のSampleテンプレートです。",
   "main": "index.js",
   "scripts": {
     "start": "gulp"
@@ -10,8 +10,8 @@
     "defaults"
   ],
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "maashi",
+  "license": "Apache-2.0",
   "devDependencies": {
     "autoprefixer": "^10.4.0",
     "browser-sync": "^2.27.7",
