@@ -58,6 +58,9 @@ const src = {
     file: 'src/img/**/*.{png,jpg,gif,svg,ico}',
     watch: 'src/img/**/*',
   },
+  public: {
+    file: 'src/public/**/*',
+  },
 }
 
 /** ===== task ===== **/
@@ -214,6 +217,16 @@ function image() {
 exports.image = image
 
 /**
+ * Copy
+ * 変換不要でdistにコピーしたいもの
+ * src/public/ → dist/
+ */
+function copy() {
+  return gulp.src(src.public.file).pipe(gulp.dest(dest))
+}
+exports.copy = copy
+
+/**
  * Local server
  */
 function serve(done) {
@@ -256,10 +269,17 @@ function watch() {
   gulp.watch(src.sass.watch, sass)
   gulp.watch(src.js.watch, js)
   gulp.watch(src.img.watch, image)
+  gulp.watch(src.public.file, copy)
 }
 exports.watch = watch
 
 /**
  * default
  */
-exports.default = gulp.series(pug, sass, serve, gulp.parallel(js, image), watch)
+exports.default = gulp.series(
+  pug,
+  sass,
+  serve,
+  gulp.parallel(js, image, copy),
+  watch
+)
