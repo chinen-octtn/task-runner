@@ -1,6 +1,6 @@
 {
   "name": "gulp-sample",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Web サイト、LP 制作等のローカル開発環境のSampleテンプレートです。",
   "main": "index.js",
   "scripts": {

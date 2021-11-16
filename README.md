@@ -58,7 +58,12 @@ npm start
 
 `/src/` で開発用ファイルを管理します。
 
-`/dist/` に各種変換/コンパイル/ビルドしたファイルが格納されます。直接 dist を触ることはないため gitignore で除外していますが Heroku 等の deploy 環境で Git に含む必要がある場合は、gitignore を編集してください。
+`/dist/` に各種変換/コンパイル/ビルドしたファイルが格納されます。
+`/dist/` 配下のファイルは直接編集してはいけません。
+
+gitignore で除外していますが Heroku 等の deploy 環境で Git に含む必要がある場合は、gitignore を編集してください。
+
+ローカルサーバーでは `/dist/` ディレクトリをドキュメントルートとして表示します。
 
 ### /src/\_data
 
@@ -92,6 +97,21 @@ gulp の js タスクで Webpack を使って TypeScript から JavaScript へ�
 /src/js/assets/js/script.ts
 ↓
 /dist/assets/js/script.js
+```
+
+### /src/public
+
+gulp の copy タスクでファイルを dist へコピーします。
+
+favicon や manifest.json 等の変換不要なファイルを設置します。
+
+`/src/public/` 配下に作成した任意のフォルダ構造のまま公開ディレクトリ(dist)に出力します。
+
+```
+例）
+/src/public/manifest.json
+↓
+/dist/manifest.json
 ```
 
 ### /src/pug
