@@ -87,9 +87,7 @@ const pugFunc = (isAll) => {
     gulp
       .src(src.pug.file, { since: lastRun })
       // .src(src.pug.file, { since: gulp.lastRun(pug) })
-      .pipe(
-        plumber({ errorHandler: notify.onError('Error: <%= error.message %>') })
-      )
+      .pipe(plumber({ errorHandler: notify.onError('Error: <%= error %>') }))
       .pipe(
         gulpPug({
           // dataを各Pugファイルで取得
@@ -125,9 +123,7 @@ function sass() {
   const lintPlugins = [stylelint()]
   return gulp
     .src(src.sass.file)
-    .pipe(
-      plumber({ errorHandler: notify.onError('Error: <%= error.message %>') })
-    )
+    .pipe(plumber({ errorHandler: notify.onError('Error: <%= error %>') }))
     .pipe(
       postcss(lintPlugins, {
         syntax: postcssSyntax,
@@ -154,6 +150,7 @@ exports.sass = sass
 function js() {
   return gulp
     .src(src.js.file)
+    .pipe(plumber({ errorHandler: notify.onError('Error: <%= error %>') }))
     .pipe(
       named((file) => {
         return file.relative.replace(/\.[^\.]+$/, '')
